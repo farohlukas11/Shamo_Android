@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_fav_product"
+    android:layout_width="match_parent"
+    android:layout_height="84dp"
+    android:layout_marginVertical="10dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_2">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_fav_product"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="12dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/image_shoes2" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_name_fav_product"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:maxLines="1"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@id/tgl_fav_product"
+            app:layout_constraintStart_toEndOf="@id/iv_fav_product"
+            app:layout_constraintTop_toTopOf="@id/iv_fav_product"
+            tools:text="Terrex Urban Low" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_price_fav_product"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/price"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/tv_name_fav_product"
+            app:layout_constraintTop_toBottomOf="@id/tv_name_fav_product"
+            tools:text="$143,98" />
+
+        <ToggleButton
+            android:id="@+id/tgl_fav_product"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/custom_background_favourite_button"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:textOff=""
+            android:textOn=""
+            app:layout_constraintBottom_toBottomOf="@id/iv_fav_product"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_fav_product"
+            tools:background="@drawable/button_wishlist_blue" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
