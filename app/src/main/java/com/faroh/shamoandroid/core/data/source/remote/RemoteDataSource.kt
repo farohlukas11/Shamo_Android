@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.util.Log
 import com.faroh.shamoandroid.core.data.source.remote.network.ApiService
 import com.faroh.shamoandroid.core.data.source.remote.response.ApiResponse
+import com.faroh.shamoandroid.core.data.source.remote.response.CheckoutProductResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.DataItem
 import com.faroh.shamoandroid.core.data.source.remote.response.LogoutResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.RegisterAndLoginResponse
+import com.faroh.shamoandroid.core.domain.model.DataCheckout
 import com.faroh.shamoandroid.core.domain.model.LoginBody
 import com.faroh.shamoandroid.core.domain.model.RegisterBody
 import io.reactivex.BackpressureStrategy
@@ -103,6 +105,26 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                 val listData = response.data?.data
                 resultData.onNext((if (listData?.isNotEmpty() == true) ApiResponse.Success(listData) else ApiResponse.Empty) as ApiResponse<List<DataItem>>)
 
+            }, { error ->
+                resultData.onNext(ApiResponse.Error(error.message.toString()))
+                Log.e("REMOTE REGISTER", error.toString())
+            })
+        return resultData.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    @SuppressLint("CheckResult")
+    fun checkoutProduct(
+        dataCheckout: DataCheckout,
+        token: String
+    ): Flowable<ApiResponse<CheckoutProductResponse>> {
+        val resultData = PublishSubject.create<ApiResponse<CheckoutProductResponse>>()
+
+        apiService.checkoutProduct(token, dataCheckout)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .take(1)
+            .subscribe({ response ->
+                resultData.onNext(if (response != null) ApiResponse.Success(response) else ApiResponse.Empty)
             }, { error ->
                 resultData.onNext(ApiResponse.Error(error.message.toString()))
                 Log.e("REMOTE REGISTER", error.toString())

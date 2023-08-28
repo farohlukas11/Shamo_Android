@@ -5,9 +5,11 @@ import com.faroh.shamoandroid.core.data.source.local.LocalDataSource
 import com.faroh.shamoandroid.core.data.source.preferences.ShamoPreferences
 import com.faroh.shamoandroid.core.data.source.remote.RemoteDataSource
 import com.faroh.shamoandroid.core.data.source.remote.response.ApiResponse
+import com.faroh.shamoandroid.core.data.source.remote.response.CheckoutProductResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.DataItem
 import com.faroh.shamoandroid.core.data.source.remote.response.LogoutResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.RegisterAndLoginResponse
+import com.faroh.shamoandroid.core.domain.model.DataCheckout
 import com.faroh.shamoandroid.core.domain.model.DataItemCart
 import com.faroh.shamoandroid.core.domain.model.LoginBody
 import com.faroh.shamoandroid.core.domain.model.RegisterBody
@@ -186,6 +188,36 @@ class ShamoRepository @Inject constructor(
                 }
             }
         }.asFlowable() as Flowable<Resource<List<DataItem>>>
+
+    @SuppressLint("CheckResult")
+    override fun checkoutProduct(
+        token: String,
+        dataCheckout: DataCheckout
+    ): Flowable<Resource<CheckoutProductResponse>> {
+        val result = PublishSubject.create<Resource<CheckoutProductResponse>>()
+
+        result.onNext(Resource.Loading())
+        remoteDataSource.checkoutProduct(dataCheckout, "Bearer $token")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .take(1)
+            .subscribe {
+                when (it) {
+                    is ApiResponse.Success -> {
+                        result.onNext(Resource.Success(it.data))
+                    }
+
+                    is ApiResponse.Empty -> {
+                        result.onNext(Resource.Success(CheckoutProductResponse()))
+                    }
+
+                    is ApiResponse.Error -> {
+                        result.onNext(Resource.Error(it.errorMessage))
+                    }
+                }
+            }
+        return result.toFlowable(BackpressureStrategy.BUFFER)
+    }
 
     //Preferences
     override suspend fun saveUser(response: RegisterAndLoginResponse) {

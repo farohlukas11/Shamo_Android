@@ -6,7 +6,9 @@ import com.faroh.shamoandroid.core.data.source.local.entity.ProductGalleryEntity
 import com.faroh.shamoandroid.core.data.source.remote.response.Category
 import com.faroh.shamoandroid.core.data.source.remote.response.DataItem
 import com.faroh.shamoandroid.core.data.source.remote.response.GalleriesItem
+import com.faroh.shamoandroid.core.data.source.remote.response.ItemsCheckout
 import com.faroh.shamoandroid.core.domain.model.DataItemCart
+import com.faroh.shamoandroid.core.domain.model.ItemCheckOut
 
 object DataMapper {
 
@@ -91,4 +93,11 @@ object DataMapper {
         price = input.price!!,
         description = input.description!!
     )
+
+    fun mapDataItemToDataCheckout(input: List<DataItemCart>): List<ItemCheckOut> = input.map {
+        ItemCheckOut(
+            id = it.dataItem.id,
+            quantity = it.inCart
+        )
+    }
 }
