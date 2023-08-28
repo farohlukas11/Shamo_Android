@@ -55,4 +55,16 @@
     <string name="rate_app">Rate App</string>
     <string name="checkout_details">Checkout Details</string>
     <string name="list_items">List Items</string>
+    <string name="address_details">Address Details</string>
+    <string name="store_location">Store Location</string>
+    <string name="adidas_core">Adidas Core</string>
+    <string name="your_address">Your Address</string>
+    <string name="marsemoon">Marsemoon</string>
+    <string name="payment_summary">Payment Summary</string>
+    <string name="product_quantity">Product Quantity</string>
+    <string name="shipping">Shipping</string>
+    <string name="product_price">Product Price</string>
+    <string name="free">Free</string>
+    <string name="total">Total</string>
+    <string name="checkout_now">Checkout Now</string>
 </resources>

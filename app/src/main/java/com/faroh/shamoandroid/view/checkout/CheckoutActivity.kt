@@ -34,6 +34,13 @@ class CheckoutActivity : AppCompatActivity(), View.OnClickListener {
                 val listCheckoutAdapter = ListCheckoutProductAdapter(listCheckout)
                 checkoutBinding.rvCheckoutProduct.adapter = listCheckoutAdapter
 
+                val subTotalPrice = it.sumOf { sub -> sub.dataItem.price!! * sub.inCart }
+
+                checkoutBinding.apply {
+                    tvItemsCheckout.text = getString(R.string.items, it.size)
+                    tvPriceCheckout.text = getString(R.string.price, subTotalPrice)
+                    tvTotalPrice.text = getString(R.string.price, subTotalPrice)
+                }
             }
         }
 
@@ -43,7 +50,9 @@ class CheckoutActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.ic_back_checkout -> finish()
-        }
+            R.id.btn_checkout -> {
 
+            }
+        }
     }
 }
