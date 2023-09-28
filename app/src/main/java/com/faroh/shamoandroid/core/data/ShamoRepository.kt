@@ -1,6 +1,5 @@
 package com.faroh.shamoandroid.core.data
 
-import android.annotation.SuppressLint
 import com.faroh.shamoandroid.core.data.source.local.LocalDataSource
 import com.faroh.shamoandroid.core.data.source.preferences.ShamoPreferences
 import com.faroh.shamoandroid.core.data.source.remote.RemoteDataSource
@@ -19,6 +18,7 @@ import com.faroh.shamoandroid.core.utils.DataMapper
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.Flow
@@ -32,16 +32,20 @@ class ShamoRepository @Inject constructor(
     private val localDataSource: LocalDataSource
 ) : IShamoRepository {
 
+    private val mCompositeDisposable = CompositeDisposable()
+
     //RemoteDataSource
-    @SuppressLint("CheckResult")
     override fun registerUser(registerBody: RegisterBody): Flowable<Resource<RegisterAndLoginResponse>> {
         val result = PublishSubject.create<Resource<RegisterAndLoginResponse>>()
 
         result.onNext(Resource.Loading())
-        remoteDataSource.registerUser(registerBody)
+        val registerUser = remoteDataSource.registerUser(registerBody)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
+            .doOnComplete {
+                mCompositeDisposable.dispose()
+            }
             .subscribe {
                 when (it) {
                     is ApiResponse.Success -> {
@@ -55,19 +59,24 @@ class ShamoRepository @Inject constructor(
                     is ApiResponse.Error -> {
                         result.onNext(Resource.Error(it.errorMessage))
                     }
+
+                    else -> {}
                 }
             }
+        mCompositeDisposable.add(registerUser)
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    @SuppressLint("CheckResult")
     override fun loginUser(loginBody: LoginBody): Flowable<Resource<RegisterAndLoginResponse>> {
         val result = PublishSubject.create<Resource<RegisterAndLoginResponse>>()
 
-        remoteDataSource.loginUser(loginBody)
+        val loginUser = remoteDataSource.loginUser(loginBody)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
+            .doOnComplete {
+                mCompositeDisposable.dispose()
+            }
             .subscribe {
                 when (it) {
                     is ApiResponse.Success -> {
@@ -81,19 +90,24 @@ class ShamoRepository @Inject constructor(
                     is ApiResponse.Error -> {
                         result.onNext(Resource.Error(it.errorMessage))
                     }
+
+                    else -> {}
                 }
             }
+        mCompositeDisposable.add(loginUser)
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
-    @SuppressLint("CheckResult")
     override fun logoutUser(token: String): Flowable<Resource<LogoutResponse>> {
         val result = PublishSubject.create<Resource<LogoutResponse>>()
 
-        remoteDataSource.logOutUser("Bearer $token")
+        val logoutUser = remoteDataSource.logOutUser("Bearer $token")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
+            .doOnComplete {
+                mCompositeDisposable.dispose()
+            }
             .subscribe {
                 when (it) {
                     is ApiResponse.Success -> {
@@ -107,8 +121,11 @@ class ShamoRepository @Inject constructor(
                     is ApiResponse.Error -> {
                         result.onNext(Resource.Error(it.errorMessage))
                     }
+
+                    else -> {}
                 }
             }
+        mCompositeDisposable.add(logoutUser)
         return result.toFlowable(BackpressureStrategy.BUFFER)
 
     }
@@ -189,7 +206,6 @@ class ShamoRepository @Inject constructor(
             }
         }.asFlowable() as Flowable<Resource<List<DataItem>>>
 
-    @SuppressLint("CheckResult")
     override fun checkoutProduct(
         token: String,
         dataCheckout: DataCheckout
@@ -197,10 +213,13 @@ class ShamoRepository @Inject constructor(
         val result = PublishSubject.create<Resource<CheckoutProductResponse>>()
 
         result.onNext(Resource.Loading())
-        remoteDataSource.checkoutProduct(dataCheckout, "Bearer $token")
+        val checkoutProduct = remoteDataSource.checkoutProduct(dataCheckout, "Bearer $token")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .take(1)
+            .doOnComplete {
+                mCompositeDisposable.dispose()
+            }
             .subscribe {
                 when (it) {
                     is ApiResponse.Success -> {
@@ -214,8 +233,11 @@ class ShamoRepository @Inject constructor(
                     is ApiResponse.Error -> {
                         result.onNext(Resource.Error(it.errorMessage))
                     }
+
+                    else -> {}
                 }
             }
+        mCompositeDisposable.add(checkoutProduct)
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 
@@ -242,16 +264,19 @@ class ShamoRepository @Inject constructor(
             DataMapper.mapProductEntitiesToDomain(it)
         }
 
-    @SuppressLint("CheckResult")
     override fun getCartProduct(): Flowable<List<DataItemCart>> {
         val result = PublishSubject.create<List<DataItemCart>>()
 
-        localDataSource.getCartProduct()
+        val cartProduct = localDataSource.getCartProduct()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnComplete {
+                mCompositeDisposable.dispose()
+            }
             .subscribe {
                 result.onNext(DataMapper.mapProductEntitiesToDomainCart(it))
             }
+        mCompositeDisposable.add(cartProduct)
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 

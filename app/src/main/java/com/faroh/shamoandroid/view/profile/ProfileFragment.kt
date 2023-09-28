@@ -64,10 +64,10 @@ class ProfileFragment : Fragment() {
                             if (dataResponse != null) {
                                 profileViewModel.saveUser(RegisterAndLoginResponse())
                                 profileViewModel.isLogOut()
-                            }
 
-                            startActivity(Intent(requireActivity(), SignInActivity::class.java))
-                            requireActivity().finish()
+                                startActivity(Intent(requireActivity(), SignInActivity::class.java))
+                                requireActivity().finish()
+                            }
                         }
 
                         is Resource.Error -> {

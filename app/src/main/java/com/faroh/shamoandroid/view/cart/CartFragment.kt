@@ -59,11 +59,8 @@ class CartFragment : Fragment() {
                     plus.inCart += 1
                     cartViewModel.setCartProduct(plus)
                 }, { minus ->
-                    if (minus.inCart < 1) {
-                        minus.inCart = 0
-                    } else {
-                        minus.inCart -= 1
-                    }
+                    if (minus.inCart < 1) minus.inCart = 0 else minus.inCart -= 1
+
                     cartViewModel.setCartProduct(minus)
                 }, { remove ->
                     remove.inCart = 0

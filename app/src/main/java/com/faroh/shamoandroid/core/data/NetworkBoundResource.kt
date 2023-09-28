@@ -66,6 +66,8 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
                     is ApiResponse.Error -> {
                         result.onNext(Resource.Error(it.errorMessage))
                     }
+
+                    else -> {}
                 }
             }
         mCompositeDisposable.add(response)
