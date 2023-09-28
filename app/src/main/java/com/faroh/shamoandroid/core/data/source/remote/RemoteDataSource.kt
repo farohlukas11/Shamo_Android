@@ -22,10 +22,11 @@ import javax.inject.Singleton
 @Singleton
 class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
-    private val mCompositeDisposable = CompositeDisposable()
 
     fun registerUser(registerBody: RegisterBody): Flowable<ApiResponse<RegisterAndLoginResponse>> {
         val resultData = PublishSubject.create<ApiResponse<RegisterAndLoginResponse>>()
+        val mCompositeDisposable = CompositeDisposable()
+
 
         val register = apiService.registerUser(registerBody)
             .subscribeOn(Schedulers.computation())
@@ -48,6 +49,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     fun loginUser(loginBody: LoginBody): Flowable<ApiResponse<RegisterAndLoginResponse>> {
         val resultData = PublishSubject.create<ApiResponse<RegisterAndLoginResponse>>()
+        val mCompositeDisposable = CompositeDisposable()
+
 
         val loginUser = apiService.loginUser(loginBody)
             .subscribeOn(Schedulers.computation())
@@ -68,6 +71,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     fun logOutUser(token: String): Flowable<ApiResponse<LogoutResponse>> {
         val result = PublishSubject.create<ApiResponse<LogoutResponse>>()
+        val mCompositeDisposable = CompositeDisposable()
+
 
         val logOutUser = apiService.logoutUser(token)
             .subscribeOn(Schedulers.computation())
@@ -88,6 +93,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     fun getAllProduct(): Flowable<ApiResponse<List<DataItem>>> {
         val resultData = PublishSubject.create<ApiResponse<List<DataItem>>>()
+        val mCompositeDisposable = CompositeDisposable()
+
 
         val getAllProduct = apiService.getAllProduct()
             .subscribeOn(Schedulers.computation())
@@ -109,6 +116,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
     fun getProductCategories(categoryId: Int): Flowable<ApiResponse<List<DataItem>>> {
         val resultData = PublishSubject.create<ApiResponse<List<DataItem>>>()
+        val mCompositeDisposable = CompositeDisposable()
+
 
         val getProductCategories = apiService.getProductCategories(categoryId)
             .subscribeOn(Schedulers.computation())
@@ -134,6 +143,8 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         token: String
     ): Flowable<ApiResponse<CheckoutProductResponse>> {
         val resultData = PublishSubject.create<ApiResponse<CheckoutProductResponse>>()
+        val mCompositeDisposable = CompositeDisposable()
+
 
         val checkOut = apiService.checkoutProduct(token, dataCheckout)
             .subscribeOn(Schedulers.computation())

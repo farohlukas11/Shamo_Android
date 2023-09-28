@@ -32,11 +32,10 @@ class ShamoRepository @Inject constructor(
     private val localDataSource: LocalDataSource
 ) : IShamoRepository {
 
-    private val mCompositeDisposable = CompositeDisposable()
-
     //RemoteDataSource
     override fun registerUser(registerBody: RegisterBody): Flowable<Resource<RegisterAndLoginResponse>> {
         val result = PublishSubject.create<Resource<RegisterAndLoginResponse>>()
+        val mCompositeDisposable = CompositeDisposable()
 
         result.onNext(Resource.Loading())
         val registerUser = remoteDataSource.registerUser(registerBody)
@@ -69,7 +68,9 @@ class ShamoRepository @Inject constructor(
 
     override fun loginUser(loginBody: LoginBody): Flowable<Resource<RegisterAndLoginResponse>> {
         val result = PublishSubject.create<Resource<RegisterAndLoginResponse>>()
+        val mCompositeDisposable = CompositeDisposable()
 
+        result.onNext(Resource.Loading())
         val loginUser = remoteDataSource.loginUser(loginBody)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -100,6 +101,7 @@ class ShamoRepository @Inject constructor(
 
     override fun logoutUser(token: String): Flowable<Resource<LogoutResponse>> {
         val result = PublishSubject.create<Resource<LogoutResponse>>()
+        val mCompositeDisposable = CompositeDisposable()
 
         val logoutUser = remoteDataSource.logOutUser("Bearer $token")
             .subscribeOn(Schedulers.io())
@@ -211,6 +213,7 @@ class ShamoRepository @Inject constructor(
         dataCheckout: DataCheckout
     ): Flowable<Resource<CheckoutProductResponse>> {
         val result = PublishSubject.create<Resource<CheckoutProductResponse>>()
+        val mCompositeDisposable = CompositeDisposable()
 
         result.onNext(Resource.Loading())
         val checkoutProduct = remoteDataSource.checkoutProduct(dataCheckout, "Bearer $token")
@@ -266,6 +269,7 @@ class ShamoRepository @Inject constructor(
 
     override fun getCartProduct(): Flowable<List<DataItemCart>> {
         val result = PublishSubject.create<List<DataItemCart>>()
+        val mCompositeDisposable = CompositeDisposable()
 
         val cartProduct = localDataSource.getCartProduct()
             .subscribeOn(Schedulers.io())
