@@ -45,6 +45,7 @@ class HomeFragment : Fragment() {
         }
 
         homeBinding.vpHome.adapter = HomePagerAdapter(this)
+        homeBinding.vpHome.isUserInputEnabled = false
         TabLayoutMediator(homeBinding.tlHome, homeBinding.vpHome) { tab, position ->
             tab.text = tabTitles[position]
         }.attach()
