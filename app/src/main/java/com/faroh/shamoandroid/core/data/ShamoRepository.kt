@@ -6,6 +6,8 @@ import com.faroh.shamoandroid.core.data.source.remote.RemoteDataSource
 import com.faroh.shamoandroid.core.data.source.remote.response.ApiResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.CheckoutProductResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.DataItem
+import com.faroh.shamoandroid.core.data.source.remote.response.DataItemTransaction
+import com.faroh.shamoandroid.core.data.source.remote.response.DataTransaction
 import com.faroh.shamoandroid.core.data.source.remote.response.LogoutResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.RegisterAndLoginResponse
 import com.faroh.shamoandroid.core.domain.model.DataCheckout
@@ -241,6 +243,29 @@ class ShamoRepository @Inject constructor(
                 }
             }
         mCompositeDisposable.add(checkoutProduct)
+        return result.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    override fun getTransaction(token: String): Flowable<Resource<List<DataItemTransaction>>> {
+        val result = PublishSubject.create<Resource<List<DataItemTransaction>>>()
+        val mCompositeDisposable = CompositeDisposable()
+
+        val getTransaction = remoteDataSource.getTransaction(token)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .take(1)
+            .doOnComplete {
+                mCompositeDisposable.dispose()
+            }
+            .subscribe {
+                when (it) {
+                    is ApiResponse.Success -> result.onNext(Resource.Success(it.data))
+                    is ApiResponse.Empty -> result.onNext(Resource.Success(DataTransaction().data!!))
+                    is ApiResponse.Error -> result.onNext(Resource.Error(it.errorMessage))
+                }
+            }
+
+        mCompositeDisposable.add(getTransaction)
         return result.toFlowable(BackpressureStrategy.BUFFER)
     }
 

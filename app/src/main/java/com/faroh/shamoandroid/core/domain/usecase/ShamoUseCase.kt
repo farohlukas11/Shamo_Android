@@ -4,6 +4,7 @@ import com.faroh.shamoandroid.core.data.Resource
 import com.faroh.shamoandroid.core.data.source.remote.response.AllProductResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.CheckoutProductResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.DataItem
+import com.faroh.shamoandroid.core.data.source.remote.response.DataItemTransaction
 import com.faroh.shamoandroid.core.data.source.remote.response.LogoutResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.RegisterAndLoginResponse
 import com.faroh.shamoandroid.core.domain.model.DataCheckout
@@ -27,6 +28,8 @@ interface ShamoUseCase {
         token: String,
         dataCheckout: DataCheckout
     ): Flowable<Resource<CheckoutProductResponse>>
+
+    fun getTransaction(token: String): Flowable<Resource<List<DataItemTransaction>>>
 
     fun logoutUser(token: String): Flowable<Resource<LogoutResponse>>
 

@@ -4,6 +4,7 @@ import com.faroh.shamoandroid.core.data.source.remote.response.AllProductRespons
 import com.faroh.shamoandroid.core.data.source.remote.response.CheckoutProductResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.LogoutResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.RegisterAndLoginResponse
+import com.faroh.shamoandroid.core.data.source.remote.response.TransactionResponse
 import com.faroh.shamoandroid.core.domain.model.DataCheckout
 import com.faroh.shamoandroid.core.domain.model.LoginBody
 import com.faroh.shamoandroid.core.domain.model.RegisterBody
@@ -51,5 +52,11 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body dataCheckout: DataCheckout
     ): Flowable<CheckoutProductResponse>
+
+    @Headers("Content-Type:application/json")
+    @GET("transactions")
+    fun getTransaction(
+        @Header("Authorization") token: String,
+    ): Flowable<TransactionResponse>
 
 }
