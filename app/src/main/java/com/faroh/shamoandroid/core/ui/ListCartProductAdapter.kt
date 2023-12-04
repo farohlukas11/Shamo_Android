@@ -31,13 +31,13 @@ class ListCartProductAdapter(
     override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: ListCartViewHolder, position: Int) {
-        val cartproduct = list[position]
-        val data = list[holder.adapterPosition]
+        val cartProduct = list[position]
+        val data = list[holder.bindingAdapterPosition]
 
-        val imageCart = cartproduct.dataItem.galleries?.get(0)?.url
-        val nameCart = cartproduct.dataItem.name
-        val priceCart = cartproduct.dataItem.price
-        val countCart = cartproduct.inCart
+        val imageCart = cartProduct.dataItem.galleries?.get(0)?.url
+        val nameCart = cartProduct.dataItem.name
+        val priceCart = cartProduct.dataItem.price
+        val countCart = cartProduct.inCart
 
         Glide.with(holder.itemView.context).load(imageCart)
             .transform(CenterCrop(), RoundedCorners(12))

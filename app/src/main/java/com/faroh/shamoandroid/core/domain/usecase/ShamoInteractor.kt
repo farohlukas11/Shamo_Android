@@ -3,6 +3,7 @@ package com.faroh.shamoandroid.core.domain.usecase
 import com.faroh.shamoandroid.core.data.Resource
 import com.faroh.shamoandroid.core.data.source.remote.response.CheckoutProductResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.DataItem
+import com.faroh.shamoandroid.core.data.source.remote.response.DataItemTransaction
 import com.faroh.shamoandroid.core.data.source.remote.response.LogoutResponse
 import com.faroh.shamoandroid.core.data.source.remote.response.RegisterAndLoginResponse
 import com.faroh.shamoandroid.core.domain.model.DataCheckout
@@ -42,6 +43,10 @@ class ShamoInteractor @Inject constructor(private val shamoRepository: IShamoRep
         dataCheckout: DataCheckout
     ): Flowable<Resource<CheckoutProductResponse>> {
         return shamoRepository.checkoutProduct(token, dataCheckout)
+    }
+
+    override fun getTransaction(token: String): Flowable<Resource<List<DataItemTransaction>>> {
+        return shamoRepository.getTransaction(token)
     }
 
     override suspend fun saveUser(response: RegisterAndLoginResponse) {

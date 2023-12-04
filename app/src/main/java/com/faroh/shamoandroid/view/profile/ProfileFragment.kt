@@ -15,6 +15,7 @@ import com.faroh.shamoandroid.core.data.source.remote.response.RegisterAndLoginR
 import com.faroh.shamoandroid.core.utils.ToastUtils.showCustomToast
 import com.faroh.shamoandroid.databinding.FragmentProfileBinding
 import com.faroh.shamoandroid.view.sigin.SignInActivity
+import com.faroh.shamoandroid.view.transaction.TransactionActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -80,6 +81,10 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        profileBinding.bgYourOrders.setOnClickListener {
+            startActivity(Intent(requireActivity(), TransactionActivity::class.java))
         }
     }
 }

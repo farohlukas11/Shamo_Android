@@ -34,7 +34,7 @@ class SignInActivity : AppCompatActivity() {
             val password = signInBinding.etPasswordSignIn.text.toString()
 
             when {
-                emailAddress.isEmpty() && password.isEmpty() -> Toast(
+                emailAddress.isEmpty() || password.isEmpty() -> Toast(
                     this
                 ).showCustomToast(true, "input must be required filled", this)
 
@@ -47,8 +47,10 @@ class SignInActivity : AppCompatActivity() {
                     ).observe(this) { response ->
                         when (response) {
 
-                            is Resource.Loading -> signInBinding.progressBar.visibility =
-                                View.VISIBLE
+                            is Resource.Loading -> {
+                                signInBinding.progressBar.visibility =
+                                    View.VISIBLE
+                            }
 
                             is Resource.Success -> {
                                 signInBinding.progressBar.visibility = View.GONE
